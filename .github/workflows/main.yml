@@ -1,0 +1,19 @@
+name: Tests Workflow
+
+on: [push]
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare to tests
+        run: |
+          rm -rf __tests__
+          openssl enc -d -aes-256-ecb -in .github/tests.tar.gz -K 978F0546372FC74D1607693A091899035CB8E88BBEB90375E5591FBB2573D459 -iter 7 | tar -xzf - -C ./
+      - name: Tests
+        run: |
+          bash -e ./__tests__/test.sh
+      - uses: education/autograding@v1
+
